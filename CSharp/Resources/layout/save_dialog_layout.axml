@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id ="@+id/save_dialog_scroll_view"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:scrollbars="vertical">
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/filepath_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/save_dialog_padding"
+        android:layout_weight="1"
+        android:hint="@string/file_path_hint" />
+    <EditText
+        android:id="@+id/filename_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/save_dialog_padding"
+        android:layout_weight="1"
+        android:hint="@string/file_name_hint" />
+    <!--Size-->
+    <LinearLayout
+        android:id="@+id/barcode_size_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:text="@string/size_label" />
+      <EditText
+          android:id="@+id/barcode_width_edit_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:inputType="number"
+          android:maxLength="4"
+          android:text="@string/width_text"
+          android:hint="@string/width_hint" />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:text="@string/divider_text" />
+      <EditText
+          android:id="@+id/barcode_height_edit_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:inputType="number"
+          android:maxLength="4"
+          android:text="@string/height_text"
+          android:hint="@string/height_hint" />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:text="@string/pixels_text" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/save_dialog_padding"
+        android:text="@string/acceptable_colors_label" />
+    <!--Foreground color-->
+    <GridLayout 
+      android:id="@+id/barcode_color_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:columnCount="2"
+      android:rowCount="2">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:text="@string/foreground_color_text" />
+      <EditText
+          android:id="@+id/barcode_foreground_edit_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:digits="0123456789qwertyuiopasdfghjklzxcvbnm#"
+          android:maxLength="9"
+          android:text="black"
+          android:hint="@string/foreground_color_hint" />
+      
+    <!--Backround color-->
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:text="@string/background_color_text" />
+      <EditText
+          android:id="@+id/barcode_backround_edit_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/save_dialog_padding"
+          android:digits="0123456789qwertyuiopasdfghjklzxcvbnm#"
+          android:maxLength="9"
+          android:text="white"
+          android:hint="@string/background_color_hint" />
+    </GridLayout>
+  </LinearLayout>
+</ScrollView>

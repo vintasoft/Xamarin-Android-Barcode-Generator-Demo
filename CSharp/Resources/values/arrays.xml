@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string-array name="barcode_list">
+    <item>Popular barcodes</item>
+    <item>GS1 barcodes</item>
+    <item>2D barcodes</item>
+    <item>1D barcodes</item>
+    <item>1D postal barcodes</item>
+  </string-array>
+
+
+  <string-array name="entries_list_languages">
+    <item>Auto</item>
+    <item>English</item>
+    <item>Russian</item>
+  </string-array>
+  <string-array name="entryvalues_list_languages">
+    <item>auto</item>
+    <item>en</item>
+    <item>ru</item>
+  </string-array>
+</resources>

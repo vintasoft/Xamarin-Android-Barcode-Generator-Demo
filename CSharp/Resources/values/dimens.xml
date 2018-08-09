@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <dimen name="edit_text_padding">15dp</dimen>
+  <dimen name="value_description_layout_min_height">100sp</dimen>
+
+  <dimen name="barcode_viewer_text_view_margin">10dp</dimen>
+  <dimen name="barcode_viewer_text_view_min_height">40sp</dimen>
+  <dimen name="barcode_viewer_image_view_margin">15dp</dimen>
+  <dimen name="barcode_type_viewer_text_size">15sp</dimen>
+  <dimen name="barcode_value_viewer_text_size">30sp</dimen>
+  <dimen name="barcode_value_bitmap_text_size">24sp</dimen>
+  
+  <dimen name="icon_padding">5dp</dimen>
+  <dimen name="settings_padding">5dp</dimen>
+  
+  <dimen name="max_postal_barcode_height">50dp</dimen>
+  <dimen name="max_one_symbol_postal_barcode_width">30dp</dimen>
+
+  <dimen name="save_dialog_padding">5dp</dimen>
+</resources>

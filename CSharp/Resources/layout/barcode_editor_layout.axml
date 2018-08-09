@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/barcode_value_edit_text"
+        android:hint="@string/enter_barcode_value_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:padding="@dimen/edit_text_padding" />
+    <EditText
+        android:id="@+id/barcode_description_edit_text"
+        android:hint="@string/enter_description_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:padding="@dimen/edit_text_padding" />
+<!--Symbol Size-->
+    <LinearLayout
+        android:id="@+id/barcode_symbol_size_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/symbol_size_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/settings_padding"
+            android:text="@string/default_symbol_size_label" />
+        <Spinner
+            android:id="@+id/barcode_symbol_size_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/settings_padding" />
+        <TextView
+            android:id="@+id/symbol_size_text_view2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/settings_padding"
+            android:visibility="gone"
+            android:text="@string/default_symbol_size_label" />
+        <Spinner
+            android:id="@+id/barcode_symbol_size_spinner2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/settings_padding"
+            android:visibility="gone" />
+    </LinearLayout>
+<!--Error Correction Level-->
+    <LinearLayout
+        android:id="@+id/barcode_error_correction_level_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/error_correction_level_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/settings_padding"
+            android:text="@string/default_error_correction_label" />
+        <Spinner
+            android:id="@+id/barcode_error_correction_level_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/settings_padding" />
+    </LinearLayout>
+<!--Barcode view and barcode generator errors-->
+    <FrameLayout
+        android:id="@+id/barcode_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/barcode_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/barcode_generator_error_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="invisible" />
+    </FrameLayout>
+</LinearLayout>

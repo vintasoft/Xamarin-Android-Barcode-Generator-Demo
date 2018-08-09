@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <!--Titles and buttons-->
+  <string name="title_barcode_type_selector">Выберите тип штрих-кода</string>
+  <string name="title_barcode_viewer">Штрих-код</string>
+
+  <string name="add_barcode_button">Добавить штрих-код</string>
+  <string name="scan_barcode_button">Сканировать штрих-код</string>
+  <string name="delete_all_barcode_button">Удалить все штрих-коды</string>
+  <string name="settings_barcode_button">Настройки</string>
+  <string name="about_barcode_button">О программе</string>
+  <string name="edit_button">Редактировать</string>
+  <string name="copy_value_button">Копировать значение</string>
+
+  <string name="error_message_title">Ошибка</string>
+  <!--Titles and buttons-->
+
+
+
+  <!-- Messages -->
+  <string name="about_message">Данная программа показывает, как генерировать штрих-коды с помощью VintaSoft Barcode .NET SDK.\nhttp://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nВерсия {0}</string>
+  <string name="barcode_added_message">Штрих-код успешно добавлен.</string>
+  <string name="language_change_message">Для смены языка вам необходимо перезапустить приложение.</string>
+
+  <string name="barcode_saved_message">Изображение штрих-кода успешно сохранено в файл: {0}</string>
+
+  <string name="barcode_type_unsupported_message">Подмножество штрих-кодов не поддерживается.\nТип подмножества: {0}</string>
+
+  <string name="vintasoft_scanner_not_found_message">Приложение Vintasoft Barcode Scanner не найдено.\nВы хотите посетить страницу Vintasoft Barcode Scanner в Play Market?</string>
+  
+  <string name="delete_all_message">Вы уверены, что хотите удалить все штрих-коды из истории?</string>
+  <string name="delete_all_empty_message">Список штрих-кодов пуст.</string>
+  <!-- Messages -->
+
+
+  <!--Base Settings-->
+  <string name="title_list_languages">Язык</string>
+  <string name="dialog_title_list_languages">Выберите язык</string>
+  <!--Base Settings-->
+  
+
+  <!--Barcode settings-->
+  <string name="enter_barcode_value_hint">введите значение штрих-кода</string>
+  <string name="enter_description_hint">введите описание</string>
+
+  <string name="default_symbol_size_label">Размер символа: </string>
+  <string name="default_error_correction_label">Коррекция ошибок: </string>
+  <string name="default_error_correction_level_label">Уровень коррекции ошибок: </string>
+
+  <string name="aztec_layers_count_label">Количество слоев: </string>
+  <string name="aztec_error_correction_level_label">Коррекция ошибок (%): </string>
+
+  <string name="pdf417_rows_label">Cтроки: </string>
+  <string name="pdf417_cols_label">Колонки: </string>
+
+  <string name="han_xin_symbol_version_label">Версия символа: </string>
+
+  <string name="auto_value">Авто</string>
+  <!--Barcode settings-->
+
+  <!--Save dialog-->
+  <string name="save_title">Сохранить штрих-код</string>
+  <string name="save_button">Сохранить</string>
+  <string name="cancel_button">Отмена</string>
+
+  <string name="file_name_hint">имя файла</string>
+  <string name="file_path_hint">путь к файлу</string>
+  <string name="size_label">Размер:</string>
+  <string name="width_hint">ширина</string>
+  <string name="height_hint">высота</string>
+  <string name="acceptable_colors_label">Допустимые форматы цветов: #AARRGGBB, #RRGGBB или название цвета.</string>
+
+  <string name="foreground_color_text">Цвет штрих-кода:</string>
+  <string name="foreground_color_hint">Цвет штрих-кода</string>
+  <string name="background_color_text">Цвет фона:</string>
+  <string name="background_color_hint">цвет фона</string>
+  <!--Save dialog-->
+
+
+  <!--Delete dialog-->
+  <string name="delete_title">Удалить штрих-код</string>
+  <string name="delete_button">Удалить</string>
+  <string name="delete_message">Вы действительно хотите удалить шрих-код?</string>
+  <!--Delete dialog-->
+</resources>

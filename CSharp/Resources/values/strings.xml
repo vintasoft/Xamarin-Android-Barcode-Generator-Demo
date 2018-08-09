@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!--Titles and buttons-->
+  <string name="app_name">VintaSoft Barcode Generator Demo</string>
+  <string name="title_barcode_type_selector">Choose Barcode Type</string>
+  <string name="title_barcode_viewer">Barcode</string>
+  
+  <string name="add_barcode_button">Add barcode</string>
+  <string name="scan_barcode_button">Scan barcode</string>
+  <string name="delete_all_barcode_button">Delete all barcodes</string>
+  <string name="settings_barcode_button">Settings</string>
+  <string name="about_barcode_button">About</string>
+  <string name="edit_button">Edit</string>
+  <string name="ok_button">OK</string>
+  <string name="copy_value_button">Copy value</string>
+
+  <string name="error_message_title">Error</string>
+
+  <string name="vintasoft_barcodes_url">http://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo</string>
+  <!--Titles and buttons-->
+
+  
+
+  <!-- Messages -->
+  <string name="about_message">This demo shows how to generate barcodes using VintaSoft Barcode .NET SDK.\nhttp://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nVersion {0}</string>
+  <string name="barcode_added_message">Barcode has added successfully.</string>
+  <string name="language_change_message">To change the language you need to restart the application.</string>
+  
+  <string name="barcode_saved_message">Barcode image has successfully saved to a file {0}</string>
+
+  <string name="barcode_type_unsupported_message">Barcode type or subset is not supported.\nType: {0}</string>
+
+  <string name="vintasoft_scanner_not_found_message">Vintasoft Barcode Scanner application is not found.\nDo you want to visit Vintasoft Barcode Scanner page in Play Market?</string>
+  
+  <string name="delete_all_message">Do you want to delete all barcodes from history?</string>
+  <string name="delete_all_empty_message">Barcode list is empty.</string>
+  <!-- Messages -->
+  
+
+  <!--Base Settings-->
+  <string name="title_list_languages">Language</string>
+  <string name="dialog_title_list_languages">Choose language</string>
+  <!--Base Settings-->
+  
+
+  <!--Barcode settings-->
+  <string name="enter_barcode_value_hint">enter barcode value</string>
+  <string name="enter_description_hint">enter description</string>
+  
+  <string name="default_symbol_size_label">Symbol size: </string>
+  <string name="default_error_correction_label">Error correction: </string>
+  <string name="default_error_correction_level_label">Error correction level: </string>
+  
+  <string name="aztec_layers_count_label">Layers count: </string>
+  <string name="aztec_error_correction_level_label">Error correction (%): </string>
+
+  <string name="pdf417_rows_label">Rows: </string>
+  <string name="pdf417_cols_label">Cols: </string>
+
+  <string name="han_xin_symbol_version_label">Symbol version: </string>
+
+  <string name="auto_value">Auto</string>
+  <!--Barcode settings-->
+  
+  <!--Save dialog-->
+  <string name="save_title">Save barode</string>
+  <string name="save_button">Save</string>
+  <string name="cancel_button">Cancel</string>
+  
+  <string name="file_name_hint">file name</string>
+  <string name="file_path_hint">file path</string>
+  <string name="size_label">Size:</string>
+  <string name="width_text">800</string>
+  <string name="width_hint">width</string>
+  <string name="height_text">600</string>
+  <string name="height_hint">height</string>
+  <string name="divider_text">x</string>
+  <string name="pixels_text">px</string>
+  <string name="acceptable_colors_label">Acceptable color formats: #AARRGGBB, #RRGGBB or color name.</string>
+
+  <string name="foreground_color_text">Foreground color:</string>
+  <string name="foreground_color_hint">foreground color</string>
+  <string name="background_color_text">Background color:</string>
+  <string name="background_color_hint">background color</string>
+  <!--Save dialog-->
+  
+  
+  <!--Delete dialog-->
+  <string name="delete_title">Delete barode</string>
+  <string name="delete_button">Delete</string>
+  <string name="delete_message">Do you want to delete barcode?</string>
+  <!--Delete dialog-->
+  
+</resources>

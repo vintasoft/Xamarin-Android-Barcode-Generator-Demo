@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string-array name="barcode_list">
+    <item>Популярные штрих-коды</item>
+    <item>GS1 штрих-коды</item>
+    <item>2D штрих-коды</item>
+    <item>1D штрих-коды</item>
+    <item>1D почтовые штрих-коды</item>
+  </string-array>
+
+
+  <string-array name="entries_list_languages">
+    <item>Авто</item>
+    <item>Английский</item>
+    <item>Русский</item>
+  </string-array>
+
+</resources>
