@@ -327,8 +327,10 @@ namespace BarcodeGeneratorDemo
 
 
         #region Methods
-        
-        /// <summary> [CHECK]
+
+        #region INTERNAL
+
+        /// <summary>
         /// Sets locale from preferences.
         /// </summary>
         internal static void SetLocaleFromPrefereces(Activity activity)
@@ -363,12 +365,12 @@ namespace BarcodeGeneratorDemo
         /// <param name="barcodeWidth">The barcode width.</param>
         /// <param name="barcodeHeight">The barcode height.</param>
         internal static void GetOptimalBarcodeSize(
-            DisplayMetrics displayMetrics, 
-            BarcodeType barcodeType, 
-            float maxPostalBarcodeHeight, 
+            DisplayMetrics displayMetrics,
+            BarcodeType barcodeType,
+            float maxPostalBarcodeHeight,
             float maxOneSymbolPostalBarcodeWidth,
             int symbolCount,
-            out int barcodeWidth, 
+            out int barcodeWidth,
             out int barcodeHeight)
         {
             // barcode size
@@ -386,7 +388,7 @@ namespace BarcodeGeneratorDemo
             // if barcode is not 2D barcode
             if (!Utils.Is2DBarcode(barcodeType))
             {
-                
+
                 // if barcode is postal barcode
                 if (Utils.IsPostalBarcode(barcodeType))
                 {
@@ -397,6 +399,85 @@ namespace BarcodeGeneratorDemo
                         barcodeWidth = postalBarcodeWidth;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns optimal barcode value text size.
+        /// </summary>
+        /// <param name="barcodeType">The barcode type.</param>
+        /// <param name="barcodeWidth">The barcode width.</param>
+        /// <param name="defaultTextSize">The default text size.</param>
+        /// <returns></returns>
+        internal static int GetOptimalBarcodeTextSize(
+            BarcodeType barcodeType,
+            int barcodeWidth,
+            int defaultTextSize)
+        {
+            // the text size
+            int textSize = defaultTextSize;
+
+            // the barcode narrow bar count
+            int narrowBarCount = 0;
+
+            // the narrow bar counts
+            int ean13NarrowBars = 95;
+            int spaceNarrowBars = 12;
+            int plus2NarrowBars = 20;
+            int plus5NarrowBars = 47;
+            int ean8NarrowBars = 67;
+            int upceNarrowBars = 51;
+
+            // get width in narrow bars for barcode type
+            switch (barcodeType)
+            {
+                case BarcodeType.EAN13:
+                case BarcodeType.UPCA:
+                    narrowBarCount = ean13NarrowBars;
+                    break;
+
+                case BarcodeType.EAN13Plus2:
+                case BarcodeType.UPCAPlus2:
+                    narrowBarCount = ean13NarrowBars + spaceNarrowBars + plus2NarrowBars;
+                    break;
+
+                case BarcodeType.EAN13Plus5:
+                case BarcodeType.UPCAPlus5:
+                    narrowBarCount = ean13NarrowBars + spaceNarrowBars + plus5NarrowBars;
+                    break;
+
+                case BarcodeType.EAN8:
+                    narrowBarCount = ean8NarrowBars;
+                    break;
+
+                case BarcodeType.EAN8Plus2:
+                    narrowBarCount = ean8NarrowBars + spaceNarrowBars + plus2NarrowBars;
+                    break;
+
+                case BarcodeType.EAN8Plus5:
+                    narrowBarCount = ean8NarrowBars + spaceNarrowBars + plus5NarrowBars;
+                    break;
+
+                case BarcodeType.UPCE:
+                    narrowBarCount = upceNarrowBars;
+                    break;
+
+                case BarcodeType.UPCEPlus2:
+                    narrowBarCount = upceNarrowBars + spaceNarrowBars + plus2NarrowBars;
+                    break;
+
+                case BarcodeType.UPCEPlus5:
+                    narrowBarCount = upceNarrowBars + spaceNarrowBars + plus5NarrowBars;
+                    break;
+            }
+
+            // if narrow bar count is not 0
+            if (narrowBarCount != 0)
+            {
+                // calculate text size
+                textSize = (int)(4.0f * barcodeWidth / narrowBarCount);
+            }
+
+            return textSize;
         }
 
 
@@ -614,7 +695,7 @@ namespace BarcodeGeneratorDemo
         /// </returns
         internal static bool IsEanOrUpcaOrUpceBarcode(BarcodeType barcodeType)
         {
-            switch(barcodeType)
+            switch (barcodeType)
             {
                 case BarcodeType.EAN13:
                 case BarcodeType.EAN13Plus2:
@@ -1605,6 +1686,10 @@ namespace BarcodeGeneratorDemo
 
         #endregion
 
+        #endregion
+
+
+        #region PRIVATE
 
         #region Init
 
@@ -2095,6 +2180,8 @@ namespace BarcodeGeneratorDemo
             MicroPDF417SimbolSizes.Add(MicroPDF417SymbolType.Col4Row38);
             MicroPDF417SimbolSizes.Add(MicroPDF417SymbolType.Col4Row44);
         }
+
+        #endregion
 
         #endregion
 

@@ -16,17 +16,21 @@
 
   <string name="error_message_title">Error</string>
 
-  <string name="vintasoft_barcodes_url">http://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo</string>
+  <string name="vintasoft_barcodes_url">https://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo</string>
   <!--Titles and buttons-->
 
   
 
   <!-- Messages -->
-  <string name="about_message">This demo shows how to generate barcodes using VintaSoft Barcode .NET SDK.\nhttp://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nVersion {0}</string>
+  <string name="about_message">This demo shows how to generate barcodes using VintaSoft Barcode .NET SDK.\nhttps://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nVersion {0}</string>
   <string name="barcode_added_message">Barcode has added successfully.</string>
   <string name="language_change_message">To change the language you need to restart the application.</string>
   
   <string name="barcode_saved_message">Barcode image has successfully saved to a file {0}</string>
+
+  <string name="filename_empty_message">Filename is not correct.</string>
+  <string name="filepath_empty_message">Filepath is not correct.</string>
+  <string name="empty_list_message">Empty. Add barcodes.</string>
 
   <string name="barcode_type_unsupported_message">Barcode type or subset is not supported.\nType: {0}</string>
 
@@ -63,7 +67,7 @@
   <!--Barcode settings-->
   
   <!--Save dialog-->
-  <string name="save_title">Save barode</string>
+  <string name="save_title">Save barcode</string>
   <string name="save_button">Save</string>
   <string name="cancel_button">Cancel</string>
   
@@ -86,7 +90,7 @@
   
   
   <!--Delete dialog-->
-  <string name="delete_title">Delete barode</string>
+  <string name="delete_title">Delete barcode</string>
   <string name="delete_button">Delete</string>
   <string name="delete_message">Do you want to delete barcode?</string>
   <!--Delete dialog-->

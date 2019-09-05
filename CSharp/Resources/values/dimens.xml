@@ -8,7 +8,7 @@
   <dimen name="barcode_viewer_image_view_margin">15dp</dimen>
   <dimen name="barcode_type_viewer_text_size">15sp</dimen>
   <dimen name="barcode_value_viewer_text_size">30sp</dimen>
-  <dimen name="barcode_value_bitmap_text_size">24sp</dimen>
+  <dimen name="barcode_value_bitmap_default_text_size">24sp</dimen>
   
   <dimen name="icon_padding">5dp</dimen>
   <dimen name="settings_padding">5dp</dimen>

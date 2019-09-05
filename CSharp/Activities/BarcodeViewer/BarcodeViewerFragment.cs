@@ -1,5 +1,7 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
@@ -59,6 +61,26 @@ namespace BarcodeGeneratorDemo
         /// </summary>
         int _barcodeHeight;
 
+        #endregion
+
+
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeViewerFragment"/> class.
+        /// </summary>
+        public BarcodeViewerFragment()
+            : base()
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeViewerFragment"/> class.
+        /// </summary>
+        protected BarcodeViewerFragment(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        { }
+        
         #endregion
 
 
@@ -147,7 +169,7 @@ namespace BarcodeGeneratorDemo
         /// <param name="inflater">An inflater.</param>
         public override void OnCreateOptionsMenu(IMenu menu, MenuInflater inflater)
         {
-            inflater.Inflate(Resource.Menu.barcode_viewer_menu, menu);
+            inflater.Inflate(Resource.Menu.menu_barcode_viewer, menu);
             base.OnCreateOptionsMenu(menu, inflater);
         }
 
@@ -211,6 +233,8 @@ namespace BarcodeGeneratorDemo
             _barcodeDescriptionTextView.Text = string.Format(formatString, barcodeTypeString, BarcodeDescription);
 
             _barcodeWriter.Settings = BarcodeInformation.BarcodeWriterSetting.Clone();
+            if (BarcodeInformation.BarcodeSubsetName != null && BarcodeInformation.BarcodeSubsetName != "")
+                ((BarcodeSymbologySubset)Utils.BarcodeTypeNameToBarcodeTypes[BarcodeInformation.BarcodeSubsetName]).Encode(BarcodeInformation.BarcodeValue, _barcodeWriter.Settings);
 
             try
             {
@@ -233,9 +257,13 @@ namespace BarcodeGeneratorDemo
                 _barcodeWriter.Settings.Height = _barcodeHeight;
                 _barcodeWriter.Settings.SetWidth(_barcodeWidth);
                 // set barcode text size
-                _barcodeWriter.Settings.ValuePaint.TextSize = Resources.GetDimensionPixelSize(Resource.Dimension.barcode_value_bitmap_text_size);
+                _barcodeWriter.Settings.ValuePaint.TextSize = Utils.GetOptimalBarcodeTextSize(_barcodeWriter.Settings.Barcode, _barcodeWidth,
+                    Resources.GetDimensionPixelSize(Resource.Dimension.barcode_value_bitmap_default_text_size));
                 // draw the barcode
                 Bitmap barcode = _barcodeWriter.GetBarcodeAsBitmap();
+                BitmapDrawable previousImage = _barcodeValueImageView.Drawable as BitmapDrawable;
+                if (previousImage != null)
+                    previousImage.Bitmap.Recycle();
                 _barcodeValueImageView.SetImageBitmap(barcode);
 
                 // save new sizes
@@ -275,6 +303,16 @@ namespace BarcodeGeneratorDemo
         /// </summary>
         private void ShowSaveDialog()
         {
+            // if Android version is equal or higher than 6.0 (API 23)
+            if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                // check WriteExternalStorage permission
+                if (Activity.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != Permission.Granted)
+                {
+                    RequestPermissions(new string[] { Manifest.Permission.WriteExternalStorage }, 0);
+                }
+            }
+
             // dialog creater
             using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Activity))
             {
@@ -384,6 +422,8 @@ namespace BarcodeGeneratorDemo
             // get colors edit text views
             EditText foregroundColorEdtiText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.barcode_foreground_edit_text);
             EditText backgroundColorEdtiText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.barcode_backround_edit_text);
+            backgroundColorEdtiText.TextChanged -= ColorEdtiText_TextChanged;
+            foregroundColorEdtiText.TextChanged -= ColorEdtiText_TextChanged;
 
             // if "Save" button clicked
             if (args.Which == (int)DialogButtonType.Positive)
@@ -392,23 +432,34 @@ namespace BarcodeGeneratorDemo
                 EditText filePathEditText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.filepath_edit_text);
                 EditText fileNameEditText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.filename_edit_text);
 
+                if (string.IsNullOrWhiteSpace(fileNameEditText.Text))
+                {
+                    Toast.MakeText(Activity, Resource.String.filename_empty_message, ToastLength.Long).Show();
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(filePathEditText.Text))
+                {
+                    Toast.MakeText(Activity, Resource.String.filepath_empty_message, ToastLength.Long).Show();
+                    return;
+                }
+
                 // get width and height
                 EditText widthEditText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.barcode_width_edit_text);
                 EditText heightEditText = _saveBarcodeImageDialog.FindViewById<EditText>(Resource.Id.barcode_height_edit_text);
-                int width = Int32.Parse(widthEditText.Text);
-                int height = Int32.Parse(heightEditText.Text);
 
                 // save showing settings
                 WriterSettings previousSettings = _barcodeWriter.Settings.Clone();
-                
+
                 // set colors to the writer
                 _barcodeWriter.Settings.ForeColor = ((ColorDrawable)foregroundColorEdtiText.Background).Color;
                 _barcodeWriter.Settings.BackColor = ((ColorDrawable)backgroundColorEdtiText.Background).Color;
+                // get path to the file
+                string fullPathWithExtention = System.IO.Path.Combine(filePathEditText.Text, fileNameEditText.Text) + ".png";
 
                 try
                 {
-                    // get path to the file
-                    string fullPathWithExtention = System.IO.Path.Combine(filePathEditText.Text, fileNameEditText.Text) + ".png";
+                    int width = Int32.Parse(widthEditText.Text);
+                    int height = Int32.Parse(heightEditText.Text);
                     // create a file
                     using (FileStream outStream = new FileStream(fullPathWithExtention, FileMode.Create, FileAccess.Write))
                     {
@@ -444,13 +495,13 @@ namespace BarcodeGeneratorDemo
                 catch (Exception e)
                 {
                     Toast.MakeText(Activity, e.Message, ToastLength.Long).Show();
+                    if (File.Exists(fullPathWithExtention))
+                        File.Delete(fullPathWithExtention);
                 }
 
                 // return showing settings
                 _barcodeWriter.Settings = previousSettings;
             }
-            backgroundColorEdtiText.TextChanged -= ColorEdtiText_TextChanged;
-            foregroundColorEdtiText.TextChanged -= ColorEdtiText_TextChanged;
         }
 
         /// <summary>

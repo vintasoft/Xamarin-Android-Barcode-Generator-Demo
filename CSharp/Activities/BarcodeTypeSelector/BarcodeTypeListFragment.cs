@@ -62,7 +62,7 @@ namespace BarcodeGeneratorDemo
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeTypeListFragment"/> class.
         /// </summary>
-        public BarcodeTypeListFragment(IntPtr javaReference, JniHandleOwnership transfer)
+        protected BarcodeTypeListFragment(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }

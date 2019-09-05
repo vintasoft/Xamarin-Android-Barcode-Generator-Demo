@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Text.Method;
 using Android.Util;
@@ -109,6 +110,15 @@ namespace BarcodeGeneratorDemo
                     else
                         value = item.ToString();
                 }
+                else if (item is Java.Lang.Number)
+                {
+                    Java.Lang.Number number = (Java.Lang.Number)item;
+                    int itemInt = number.IntValue();
+                    if ((int)itemInt == -1)
+                        value = Context.Resources.GetString(Resource.String.auto_value);
+                    else
+                        value = item.ToString();
+                }
 
                 textView1.Text = value;
 
@@ -161,9 +171,19 @@ namespace BarcodeGeneratorDemo
                 if (item is PDF417ErrorCorrectionLevel)
                     value = Utils.PDF417ErrorCorrectionLevelToString((PDF417ErrorCorrectionLevel)item);
 
+                
                 if (item is int)
                 {
                     if ((int)item == -1)
+                        value = Context.Resources.GetString(Resource.String.auto_value);
+                    else
+                        value = item.ToString();
+                }
+                else if (item is Java.Lang.Number)
+                {
+                    Java.Lang.Number number = (Java.Lang.Number)item;
+                    int itemInt = number.IntValue();
+                    if ((int)itemInt == -1)
                         value = Context.Resources.GetString(Resource.String.auto_value);
                     else
                         value = item.ToString();
@@ -278,8 +298,16 @@ namespace BarcodeGeneratorDemo
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeEditorFragment"/> class.
         /// </summary>
-        internal BarcodeEditorFragment()
+        public BarcodeEditorFragment()
             : base()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeEditorFragment"/> class.
+        /// </summary>
+        protected BarcodeEditorFragment(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
         }
 
@@ -410,11 +438,11 @@ namespace BarcodeGeneratorDemo
         /// Creates menu.
         /// </summary>
         /// <param name="menu">A menu.</param>
-        /// <param name="inflater">An inflater.</param>
-        public override void OnCreateOptionsMenu(IMenu menu, MenuInflater inflater)
+        /// <param name="menuInflater">A menu inflater.</param>
+        public override void OnCreateOptionsMenu(IMenu menu, MenuInflater menuInflater)
         {
-            inflater.Inflate(Resource.Menu.create_barcode_menu, menu);
-            base.OnCreateOptionsMenu(menu, inflater);
+            menuInflater.Inflate(Resource.Menu.menu_create_barcode, menu);
+            base.OnCreateOptionsMenu(menu, menuInflater);
         }
 
         /// <summary>
@@ -452,9 +480,10 @@ namespace BarcodeGeneratorDemo
                         else if (Activity is BarcodeViewerActivity)
                         {
                             // set changed values to the parent activity
-                            ((BarcodeViewerActivity)Activity).BarcodeInformation.BarcodeWriterSetting = _barcodeWriterSettings.Clone();
-                            ((BarcodeViewerActivity)Activity).BarcodeInformation.BarcodeDescription = _barcodeDescriptionEditText.Text;
-                            ((BarcodeViewerActivity)Activity).BarcodeInformation.BarcodeValue = _barcodeValue;
+                            BarcodeViewerActivity barcodeViewerActivity = (BarcodeViewerActivity)Activity;
+                            barcodeViewerActivity.BarcodeInformation.BarcodeWriterSetting = _barcodeWriterSettings.Clone();
+                            barcodeViewerActivity.BarcodeInformation.BarcodeDescription = _barcodeDescriptionEditText.Text;
+                            barcodeViewerActivity.BarcodeInformation.BarcodeValue = _barcodeValue;
                             // return to the parent activity
                             Activity.OnBackPressed();
                         }
@@ -597,7 +626,7 @@ namespace BarcodeGeneratorDemo
         internal void SetBarcodeValue(Utils.BarcodeInformation barcodeInformation)
         {
             _barcodeValue = barcodeInformation.BarcodeValue;
-            _barcodeWriterSettings = barcodeInformation.BarcodeWriterSetting;
+            _barcodeWriterSettings = barcodeInformation.BarcodeWriterSetting.Clone();
             _barcodeDescription = barcodeInformation.BarcodeDescription;
         }
 
@@ -607,7 +636,7 @@ namespace BarcodeGeneratorDemo
         #region PRIVATE
 
         /// <summary>
-        /// Barcode settngs are changed.
+        /// Barcode settings are changed.
         /// </summary>
         private void BarcodeSettings_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -640,6 +669,9 @@ namespace BarcodeGeneratorDemo
                 _barcodeWriter.Settings = _barcodeWriterSettings;
                 // try to get barcode
                 Android.Graphics.Bitmap barcode = _barcodeWriter.GetBarcodeAsBitmap();
+                BitmapDrawable previousImage = _barcodeImagePreview.Drawable as BitmapDrawable;
+                if (previousImage != null)
+                    previousImage.Bitmap.Recycle();
                 _barcodeImagePreview.SetImageBitmap(barcode);
                 _barcodeImagePreview.Visibility = ViewStates.Visible;
                 _barcodeGeneratorErrorTextView.Visibility = ViewStates.Invisible;
@@ -764,18 +796,19 @@ namespace BarcodeGeneratorDemo
             int barcodeHeight;
             // get optimal barcode size
             Utils.GetOptimalBarcodeSize(
-                displayMetrics, _barcodeWriter.Settings.Barcode,
-                maxPostalBarcodeHeight, maxOneSymbolPostalBarcodeWidth, _barcodeWriter.Settings.Value.Length,
+                displayMetrics, _barcodeWriterSettings.Barcode,
+                maxPostalBarcodeHeight, maxOneSymbolPostalBarcodeWidth, _barcodeWriterSettings.Value.Length,
                 out barcodeWidth, out barcodeHeight);
 
-            if (!Utils.IsEanOrUpcaOrUpceBarcode(_barcodeWriter.Settings.Barcode))
-                _barcodeWriter.Settings.ValueVisible = false;
+            if (!Utils.IsEanOrUpcaOrUpceBarcode(_barcodeWriterSettings.Barcode))
+                _barcodeWriterSettings.ValueVisible = false;
 
             // set barcode size
-            _barcodeWriter.Settings.Height = barcodeHeight;
-            _barcodeWriter.Settings.SetWidth(barcodeWidth);
+            _barcodeWriterSettings.Height = barcodeHeight;
+            _barcodeWriterSettings.SetWidth(barcodeWidth);
             // set barcode text size
-            _barcodeWriter.Settings.ValuePaint.TextSize = Resources.GetDimensionPixelSize(Resource.Dimension.barcode_value_bitmap_text_size);
+            _barcodeWriter.Settings.ValuePaint.TextSize = Utils.GetOptimalBarcodeTextSize(_barcodeWriter.Settings.Barcode, barcodeWidth,
+                Resources.GetDimensionPixelSize(Resource.Dimension.barcode_value_bitmap_default_text_size));
         }
 
 

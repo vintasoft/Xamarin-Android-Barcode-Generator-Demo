@@ -13,21 +13,27 @@
   <string name="copy_value_button">Копировать значение</string>
 
   <string name="error_message_title">Ошибка</string>
+
+  <string name="vintasoft_barcodes_url">https://www.vintasoft.com/rus/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo</string>
   <!--Titles and buttons-->
 
 
 
   <!-- Messages -->
-  <string name="about_message">Данная программа показывает, как генерировать штрих-коды с помощью VintaSoft Barcode .NET SDK.\nhttp://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nВерсия {0}</string>
+  <string name="about_message">Данная программа показывает, как генерировать штрих-коды с помощью VintaSoft Barcode .NET SDK.\nhttps://www.vintasoft.com/vsbarcode-dotnet-index.html#BarcodeGeneratorDemo\n\nВерсия {0}</string>
   <string name="barcode_added_message">Штрих-код успешно добавлен.</string>
   <string name="language_change_message">Для смены языка вам необходимо перезапустить приложение.</string>
 
   <string name="barcode_saved_message">Изображение штрих-кода успешно сохранено в файл: {0}</string>
 
+  <string name="filename_empty_message">Некорректное имя файла.</string>
+  <string name="filepath_empty_message">Некорректный путь к файлу.</string>
+  <string name="empty_list_message">Пусто. Добавьте штрих-коды.</string>
+
   <string name="barcode_type_unsupported_message">Подмножество штрих-кодов не поддерживается.\nТип подмножества: {0}</string>
 
   <string name="vintasoft_scanner_not_found_message">Приложение Vintasoft Barcode Scanner не найдено.\nВы хотите посетить страницу Vintasoft Barcode Scanner в Play Market?</string>
-  
+
   <string name="delete_all_message">Вы уверены, что хотите удалить все штрих-коды из истории?</string>
   <string name="delete_all_empty_message">Список штрих-кодов пуст.</string>
   <!-- Messages -->
@@ -37,7 +43,7 @@
   <string name="title_list_languages">Язык</string>
   <string name="dialog_title_list_languages">Выберите язык</string>
   <!--Base Settings-->
-  
+
 
   <!--Barcode settings-->
   <string name="enter_barcode_value_hint">введите значение штрих-кода</string>
@@ -50,7 +56,7 @@
   <string name="aztec_layers_count_label">Количество слоев: </string>
   <string name="aztec_error_correction_level_label">Коррекция ошибок (%): </string>
 
-  <string name="pdf417_rows_label">Cтроки: </string>
+  <string name="pdf417_rows_label">Строки: </string>
   <string name="pdf417_cols_label">Колонки: </string>
 
   <string name="han_xin_symbol_version_label">Версия символа: </string>
@@ -80,6 +86,6 @@
   <!--Delete dialog-->
   <string name="delete_title">Удалить штрих-код</string>
   <string name="delete_button">Удалить</string>
-  <string name="delete_message">Вы действительно хотите удалить шрих-код?</string>
+  <string name="delete_message">Вы действительно хотите удалить штрих-код?</string>
   <!--Delete dialog-->
 </resources>

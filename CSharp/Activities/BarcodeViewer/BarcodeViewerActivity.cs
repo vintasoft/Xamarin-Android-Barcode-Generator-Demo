@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
+using Android.Support.V7.App;
 using Android.Views;
 
 using Vintasoft.XamarinBarcode;
@@ -15,7 +16,7 @@ namespace BarcodeGeneratorDemo
         Label = "@string/title_barcode_viewer", Icon = "@mipmap/icon", Name = "activity.BarcodeViewerActivity",
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         WindowSoftInputMode = SoftInput.AdjustResize)]
-    public class BarcodeViewerActivity : Activity
+    public class BarcodeViewerActivity : AppCompatActivity
     {
 
         #region Fields
@@ -121,8 +122,8 @@ namespace BarcodeGeneratorDemo
             Utils.SetLocaleFromPrefereces(this);
             SetContentView(Resource.Layout.main);
 
-            ActionBar.SetDisplayHomeAsUpEnabled(true);
-            ActionBar.SetTitle(Resource.String.title_barcode_viewer);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetTitle(Resource.String.title_barcode_viewer);
 
             string xmlSerialization = Intent.GetStringExtra("barcode");
             WriterSettings barcodeWriterSettings = Utils.DeserializeBarcodeWriterSettings(xmlSerialization);

@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="invisible">
+        android:visibility="gone">
         <TextView
             android:id="@+id/symbol_size_text_view"
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="invisible">
+        android:visibility="gone">
         <TextView
             android:id="@+id/error_correction_level_text_view"
             android:layout_width="wrap_content"

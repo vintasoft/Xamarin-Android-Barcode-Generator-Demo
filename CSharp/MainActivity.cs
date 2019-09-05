@@ -3,8 +3,8 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.OS;
-using Android.Preferences;
 using Android.Runtime;
+using Android.Support.V7.App;
 using Android.Text.Method;
 using Android.Util;
 using Android.Views;
@@ -26,11 +26,12 @@ namespace BarcodeGeneratorDemo
     /// </summary>
     [Activity(
         Label = "@string/app_name", Icon = "@mipmap/icon", Name = "activity.MainActivity",
-        MainLauncher = true, 
+        Theme = "@style/MainActivityTheme",
+        MainLauncher = true,
         AlwaysRetainTaskState = true,
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize, 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         LaunchMode = LaunchMode.SingleTask)]
-    public class MainActivity : Activity
+    public class MainActivity : AppCompatActivity
     {
 
         #region Constants
@@ -39,6 +40,11 @@ namespace BarcodeGeneratorDemo
         /// The barcode generator fragment tag.
         /// </summary>
         const string BARCODE_GENERATOR_FRAGMENT_TAG = "BARCODEGENERATORFRAGMENT";
+
+        /// <summary>
+        /// Request code for granting the WriteExternalStorage permission.
+        /// </summary>
+        const int WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 100;
 
         #endregion
 
@@ -50,22 +56,67 @@ namespace BarcodeGeneratorDemo
         /// The barcode generator fragment.
         /// </summary>
         BarcodeGeneratorFragment _barcodeGeneratorFragment;
-        
+
         /// <summary>
         /// The info dialog.
         /// </summary>
-        AlertDialog _infoDialog = null;
+        Android.Support.V7.App.AlertDialog _infoDialog = null;
 
         /// <summary>
         /// The path to the history file.
         /// </summary>
         string _historyFilePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "history.data");
 
+        /// <summary>
+        /// Determines that the WriteExternalStorage permission is granted.
+        /// </summary>
+        bool _isWriteExternalStorageGranted = false;
+
+        #endregion
+
+
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="MainActivity"/> class.
+        /// </summary>
+        public MainActivity()
+            : base()
+        {
+        }
+
         #endregion
 
 
 
         #region Methods
+
+        #region PUBLIC
+
+        /// <summary>
+        /// Action bar button is pressed.
+        /// </summary>
+        /// <param name="item">A clicked button.</param>
+        /// <returns>
+        /// <b>true</b> - if button click is handled; otherwise, <b>false</b>.
+        /// </returns>
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Android.Resource.Id.Home:
+                    Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(Resources.GetString(Resource.String.vintasoft_barcodes_url)));
+                    StartActivity(intent);
+                    return true;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        #endregion
+
+
+        #region PROTECTED
 
         /// <summary>
         /// Called when the activity is starting.
@@ -84,20 +135,19 @@ namespace BarcodeGeneratorDemo
 
             base.OnCreate(savedInstanceState);
 
+            List<Utils.BarcodeInformation> values = LoadHistory();
+
             // set our view from the "main" layout resource
             Utils.SetLocaleFromPrefereces(this);
             SetContentView(Resource.Layout.main);
 
-            List<Utils.BarcodeInformation> values = LoadHistory();
+            _barcodeGeneratorFragment = (BarcodeGeneratorFragment)FragmentManager.FindFragmentByTag(BARCODE_GENERATOR_FRAGMENT_TAG);
+            if (_barcodeGeneratorFragment == null)
+                _barcodeGeneratorFragment = new BarcodeGeneratorFragment(values);
 
-            _barcodeGeneratorFragment = new BarcodeGeneratorFragment(values);
-
-            ActionBar.SetDisplayShowTitleEnabled(false);
-            ActionBar.SetDisplayShowCustomEnabled(true);
-            ActionBar.CustomView = LayoutInflater.From(this).Inflate(Resource.Layout.action_bar_layout, null);
-
-            ImageView titleButton = FindViewById<ImageView>(Resource.Id.icon_button);
-            titleButton.Click += TitleButton_Click;
+            SupportActionBar.SetHomeButtonEnabled(true);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.Show();
 
             // create a new transaction
             FragmentTransaction transaction = FragmentManager.BeginTransaction();
@@ -105,8 +155,49 @@ namespace BarcodeGeneratorDemo
             transaction.Replace(Resource.Id.mainContentFrame, _barcodeGeneratorFragment, BARCODE_GENERATOR_FRAGMENT_TAG);
             // commit the transaction
             transaction.Commit();
+
+            // if Android version is equal or higher than 6.0 (API 23)
+            if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                if (CheckSelfPermission(Android.Manifest.Permission.WriteExternalStorage) != Permission.Granted)
+                {
+                    RequestPermissions(new string[] { Android.Manifest.Permission.WriteExternalStorage }, WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+                }
+                else
+                {
+                    _isWriteExternalStorageGranted = true;
+                }
+            }
+            // if Android version is less than 6.0 (API 23)
+            else
+            {
+                _isWriteExternalStorageGranted = true;
+            }
         }
 
+        /// <summary>
+        /// Called when request permissions result occured.
+        /// </summary>
+        /// <param name="requestCode">The request code.</param>
+        /// <param name="permissions">The permissions.</param>
+        /// <param name="grantResults">The grant results.</param>
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            if (requestCode == WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE)
+            {
+                if (grantResults[0] == Permission.Granted)
+                {
+                    _isWriteExternalStorageGranted = true;
+                }
+                else
+                {
+                    // finish the application
+                    Finish();
+                }
+            }
+        }
 
         /// <summary>
         /// Performs any final cleanup before an activity is destroyed.
@@ -164,6 +255,7 @@ namespace BarcodeGeneratorDemo
                             // update list item
                             Utils.BarcodeInformation item = adapter.GetItem(_barcodeGeneratorFragment.ClickedItemIndex);
                             item.BarcodeWriterSetting = barcodeWriterSettings;
+                            item.BarcodeValue = barcodeValue;
                             item.BarcodeDescription = barcodeDescription;
                             item.BarcodeSubsetName = barcodeSubset;
                         }
@@ -181,26 +273,6 @@ namespace BarcodeGeneratorDemo
 
             base.OnNewIntent(intent);
         }
-
-        /// <summary>
-        /// Deletes saved history.
-        /// </summary>
-        internal void DeleteSavedHistory()
-        {
-            File.Delete(_historyFilePath);
-        }
-
-        /// <summary>
-        /// Opens URL "www.vintasoft.com" in the browser.
-        /// </summary>
-        private void TitleButton_Click(object sender, EventArgs e)
-        {
-            Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(Resources.GetString(Resource.String.vintasoft_barcodes_url)));
-            StartActivity(intent);
-        }
-
-
-        #region Scanning
 
         /// <summary>
         /// Called when an activity you launched exits, giving you the requestCode you started
@@ -271,7 +343,12 @@ namespace BarcodeGeneratorDemo
             }
             base.OnActivityResult(requestCode, resultCode, data);
         }
-        
+
+        #endregion
+
+
+        #region INTERNAL
+
         /// <summary>
         /// Starts barcode scanning.
         /// </summary>
@@ -286,7 +363,7 @@ namespace BarcodeGeneratorDemo
             // if Vintasoft Barcode Scanner application is not found
             catch (ActivityNotFoundException ex)
             {
-                using (AlertDialog.Builder builder = new AlertDialog.Builder(this))
+                using (Android.Support.V7.App.AlertDialog.Builder builder = new Android.Support.V7.App.AlertDialog.Builder(this))
                 {
                     builder.SetPositiveButton(Resource.String.ok_button, ScannerDialogPositiveButton_Clicked);
                     builder.SetNegativeButton(Resource.String.cancel_button, (EventHandler<DialogClickEventArgs>)null);
@@ -294,50 +371,11 @@ namespace BarcodeGeneratorDemo
                     builder.SetMessage(Resource.String.vintasoft_scanner_not_found_message);
 
                     // create dialog
-                    AlertDialog dialog = builder.Create();
+                    Android.Support.V7.App.AlertDialog dialog = builder.Create();
                     // show on screen
                     dialog.Show();
                 }
             }
-        }
-
-        /// <summary>
-        /// "Scanner dialog" button is clicked.
-        /// </summary>
-        private void ScannerDialogPositiveButton_Clicked(object sender, DialogClickEventArgs args)
-        {
-            try
-            {
-                // open the Vintasoft Barcode Scanner application page in in Google Play Market
-                OpenVintasoftBarcodeScannerPageInPlayMarket();
-            }
-            catch (ActivityNotFoundException ex)
-            {
-                // open the Vintasoft Barcode Scanner application web page in play.google.com
-                OpenVintasoftBarcodeScannerPageInBrowser();
-            }
-        }
-
-        /// <summary>
-        /// Opens the Vintasoft Barcode Scanner application page in Google Play Market.
-        /// </summary>
-        private void OpenVintasoftBarcodeScannerPageInPlayMarket()
-        {
-            Intent playStoreIntent = new Intent(Intent.ActionView);
-            playStoreIntent.SetData(Android.Net.Uri.Parse("market://details?id=com.vintasoft.barcodescanner"));
-            // open the Vintasoft Barcode Scanner application page in Google Play Market
-            StartActivity(playStoreIntent);
-        }
-
-        /// <summary>
-        /// Opens the Vintasoft Barcode Scanner application web page in play.google.com.
-        /// </summary>
-        private void OpenVintasoftBarcodeScannerPageInBrowser()
-        {
-            Intent playStoreIntentLink = new Intent(Intent.ActionView);
-            playStoreIntentLink.SetData(Android.Net.Uri.Parse("http://play.google.com/store/apps/details?id=com.vintasoft.barcodescanner"));
-            // open the Vintasoft Barcode Scanner application page in Google Play Market in browser
-            StartActivity(playStoreIntentLink);
         }
 
         /// <summary>
@@ -358,10 +396,14 @@ namespace BarcodeGeneratorDemo
             StartActivity(intent);
         }
 
-        #endregion
 
-
-        #region Dialog
+        /// <summary>
+        /// Deletes saved history.
+        /// </summary>
+        internal void DeleteSavedHistory()
+        {
+            File.Delete(_historyFilePath);
+        }
 
         /// <summary>
         /// Shows a dialog with information.
@@ -371,11 +413,11 @@ namespace BarcodeGeneratorDemo
         internal void ShowInfoDialog(string title, string value)
         {
             // create the dialog builder
-            using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this))
+            using (Android.Support.V7.App.AlertDialog.Builder dialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(this))
             {
                 // create a button
                 dialogBuilder.SetPositiveButton(Resource.String.ok_button, (EventHandler<DialogClickEventArgs>)null);
-               
+
                 // create a dialog
                 _infoDialog = dialogBuilder.Create();
 
@@ -410,6 +452,57 @@ namespace BarcodeGeneratorDemo
         #endregion
 
 
+        #region PRIVATE
+
+        /// <summary>
+        /// Opens URL "www.vintasoft.com" in the browser.
+        /// </summary>
+        private void TitleButton_Click(object sender, EventArgs e)
+        {
+            Intent intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(Resources.GetString(Resource.String.vintasoft_barcodes_url)));
+            StartActivity(intent);
+        }
+
+        /// <summary>
+        /// "Scanner dialog" button is clicked.
+        /// </summary>
+        private void ScannerDialogPositiveButton_Clicked(object sender, DialogClickEventArgs args)
+        {
+            try
+            {
+                // open the Vintasoft Barcode Scanner application page in in Google Play Market
+                OpenVintasoftBarcodeScannerPageInPlayMarket();
+            }
+            catch (ActivityNotFoundException)
+            {
+                // open the Vintasoft Barcode Scanner application web page in play.google.com
+                OpenVintasoftBarcodeScannerPageInBrowser();
+            }
+        }
+
+        /// <summary>
+        /// Opens the Vintasoft Barcode Scanner application page in Google Play Market.
+        /// </summary>
+        private void OpenVintasoftBarcodeScannerPageInPlayMarket()
+        {
+            Intent playStoreIntent = new Intent(Intent.ActionView);
+            playStoreIntent.SetData(Android.Net.Uri.Parse("market://details?id=com.vintasoft.barcodescanner"));
+            // open the Vintasoft Barcode Scanner application page in Google Play Market
+            StartActivity(playStoreIntent);
+        }
+
+        /// <summary>
+        /// Opens the Vintasoft Barcode Scanner application web page in play.google.com.
+        /// </summary>
+        private void OpenVintasoftBarcodeScannerPageInBrowser()
+        {
+            Intent playStoreIntentLink = new Intent(Intent.ActionView);
+            playStoreIntentLink.SetData(Android.Net.Uri.Parse("https://play.google.com/store/apps/details?id=com.vintasoft.barcodescanner"));
+            // open the Vintasoft Barcode Scanner application page in Google Play Market in browser
+            StartActivity(playStoreIntentLink);
+        }
+
+
         #region Save/Load history
 
         /// <summary>
@@ -422,38 +515,48 @@ namespace BarcodeGeneratorDemo
 
             if (adapter != null)
             {
-                // open file stream to save history
-                using (FileStream fileStream = new FileStream(_historyFilePath, FileMode.Create, FileAccess.Write))
+                try
                 {
-                    // open java object stream, which allows to seralize objects to a file
-                    using (Java.IO.ObjectOutputStream outStream = new Java.IO.ObjectOutputStream(fileStream))
+                    // open file stream to save history
+                    using (FileStream fileStream = new FileStream(_historyFilePath, FileMode.Create, FileAccess.Write))
                     {
-                        // temp list to get serialized items
-                        List<ArrayList> list = new List<ArrayList>();
+                        // open java object stream, which allows to seralize objects to a file
+                        using (Java.IO.ObjectOutputStream outStream = new Java.IO.ObjectOutputStream(fileStream))
+                        {
+                            // temp list to get serialized items
+                            List<ArrayList> list = new List<ArrayList>();
 
-                        // for each list item
-                        for (int index = 0; index < adapter.Count; index++)
-                        {
-                            // get item
-                            Utils.BarcodeInformation item = adapter.GetItem(index);
-                            // serialize writer settings
-                            string xmlBarcode = Utils.SerializeBarcodeWriterSettings(item.BarcodeWriterSetting);
-                            // create java list for four strings
-                            ArrayList serializedStruct = new ArrayList();
-                            serializedStruct.Add(xmlBarcode);
-                            serializedStruct.Add(item.BarcodeDescription);
-                            serializedStruct.Add(item.BarcodeSubsetName);
-                            serializedStruct.Add(item.BarcodeValue);
-                            // add serialized object to the temp list
-                            list.Add(serializedStruct);
+                            // for each list item
+                            for (int index = 0; index < adapter.Count; index++)
+                            {
+                                // get item
+                                Utils.BarcodeInformation item = adapter.GetItem(index);
+                                // serialize writer settings
+                                string xmlBarcode = Utils.SerializeBarcodeWriterSettings(item.BarcodeWriterSetting);
+                                // create java list for four strings
+                                ArrayList serializedStruct = new ArrayList();
+                                serializedStruct.Add(xmlBarcode);
+                                serializedStruct.Add(item.BarcodeDescription);
+                                serializedStruct.Add(item.BarcodeSubsetName);
+                                serializedStruct.Add(item.BarcodeValue);
+                                // add serialized object to the temp list
+                                list.Add(serializedStruct);
+                            }
+                            // create java list
+                            using (ArrayList arrayList = new ArrayList(list))
+                            {
+                                // write java serializable objects to the file
+                                outStream.WriteObject(arrayList);
+                            }
+                            outStream.Close();
                         }
-                        // create java list
-                        using (ArrayList arrayList = new ArrayList(list))
-                        {
-                            // write java serializable objects to the file
-                            outStream.WriteObject(arrayList);
-                        }
+                        fileStream.Close();
                     }
+                }
+                catch (Exception e)
+                {
+                    Toast.MakeText(this, string.Format("Save history error: {0}", e.Message), ToastLength.Long).Show();
+                    LogUnhandledException(e);
                 }
             }
         }
@@ -496,12 +599,15 @@ namespace BarcodeGeneratorDemo
 
                                 values.Add(barcodeInformation);
                             }
+                            inStream.Close();
                         }
+                        fileStream.Close();
                     }
                 }
                 catch (Exception e)
                 {
-                    Toast.MakeText(this, e.Message, ToastLength.Long).Show();
+                    Toast.MakeText(this, string.Format("Load history error: {0}", e.Message), ToastLength.Long).Show();
+                    LogUnhandledException(e);
                 }
             }
 
@@ -511,7 +617,7 @@ namespace BarcodeGeneratorDemo
         #endregion
 
 
-        #region Unhandled exception
+        #region Unhandled exceptions
 
         /// <summary>
         /// Handles an Unhandled exception, which occured when managed exception was translated into an Android throwable.
@@ -533,7 +639,7 @@ namespace BarcodeGeneratorDemo
         /// Saves log file with unhandled exception info.
         /// </summary>
         /// <param name="exception">An exception.</param>
-        internal void LogUnhandledException(Exception exception)
+        private void LogUnhandledException(Exception exception)
         {
             string errorMessage = string.Format("Time: {0}\r\nError: UnhandledExceptionMessage\r\n{1}\r\nStackTrace: {2}",
                 DateTime.Now, exception.Message, exception.StackTrace);
@@ -554,6 +660,8 @@ namespace BarcodeGeneratorDemo
                 Toast.MakeText(Application.ApplicationContext, string.Format("Logging Exception {0}", e.Message), ToastLength.Short).Show();
             }
         }
+
+        #endregion
 
         #endregion
 
