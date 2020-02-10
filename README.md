@@ -1,4 +1,4 @@
-<h1>VintaSoft Xamarin.Android Barcode Generator Demo</h1>
+<h1>VintaSoft Xamarin Android Barcode Generator Demo</h1>
 
 Demo application shows how to generate barcodes in Android application. Demo uses functionality of <a href="https://www.vintasoft.com/vsbarcode-dotnet-index.html">VintaSoft Barcode .NET SDK</a>. Source codes for C# are available.
 
