@@ -84,6 +84,7 @@ namespace BarcodeGeneratorDemo
         public MainActivity()
             : base()
         {
+            VintasoftBarcode.VintasoftXamarinBarcodeLicense.Register();
         }
 
         #endregion

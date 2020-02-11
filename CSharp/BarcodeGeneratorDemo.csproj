@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D4220E3B-B30A-4012-848E-01A56935EAF3}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BarcodeGeneratorDemo</RootNamespace>
+    <AssemblyName>BarcodeGeneratorDemo</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidManagedSymbols>true</AndroidManagedSymbols>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Vintasoft.XamarinBarcode.Android" Version="12.1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Android.Arch.Core.Common" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Core.Runtime" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Common" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData.Core" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Runtime" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.ViewModel" Version="1.1.1.1" />
+    <PackageReference Include="Xamarin.Android.Support.Animated.Vector.Drawable" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Annotations" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.AsyncLayoutInflater" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Collections" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Compat" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.CoordinaterLayout" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Core.UI" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.CursorAdapter" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.CustomView" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.DocumentFile" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.DrawerLayout" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Fragment" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Interpolator" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Loader" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.LocalBroadcastManager" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Media.Compat" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Print" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.SlidingPaneLayout" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.SwipeRefreshLayout" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Vector.Drawable" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.VersionedParcelable" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.ViewPager" Version="28.0.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Activities\BarcodeTypeSelector\BarcodeEditorFragment.cs" />
+    <Compile Include="Activities\BarcodeTypeSelector\BarcodeTypeListFragment.cs" />
+    <Compile Include="Activities\BarcodeTypeSelector\BarcodeTypeSelectorActivity.cs" />
+    <Compile Include="Activities\BarcodeViewer\BarcodeViewerActivity.cs" />
+    <Compile Include="Activities\BarcodeViewer\BarcodeViewerFragment.cs" />
+    <Compile Include="Activities\Settings\SettingsFragment.cs" />
+    <Compile Include="Activities\Settings\SettingsActivity.cs" />
+    <Compile Include="BarcodeArrayAdapter.cs" />
+    <Compile Include="BarcodeGeneratorFragment.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="VintasoftXamarinBarcodeLicense.cs" />
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\layout\save_dialog_layout.axml" />
+    <AndroidResource Include="Resources\layout\barcode_viewer_layout.axml" />
+    <AndroidResource Include="Resources\layout\barcode_editor_layout.axml" />
+    <AndroidResource Include="Resources\layout\action_bar_layout.axml" />
+    <AndroidResource Include="Resources\layout\main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\strings.xml" />
+    <Folder Include="Resources\drawable\" />
+    <AndroidResource Include="Resources\menu\main_action_bar.xml" />
+    <AndroidResource Include="Resources\mipmap-hdpi\accept.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\add.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\camera.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\delete.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\edit.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\icon.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\save.png" />
+    <AndroidResource Include="Resources\values-ru\arrays.xml" />
+    <AndroidResource Include="Resources\values-ru\strings.xml" />
+    <AndroidResource Include="Resources\values\arrays.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\values\dimens.xml" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\accept.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\add.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\camera.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\delete.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\edit.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\save.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\accept.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\add.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\camera.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\delete.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\edit.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\icon.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\save.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\accept.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\add.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\camera.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\delete.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\edit.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\save.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\accept.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\add.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\camera.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\delete.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\edit.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\save.png" />
+    <AndroidResource Include="Resources\xml\settings_page.xml" />
+    <AndroidResource Include="Resources\menu\menu_create_barcode.xml" />
+    <AndroidResource Include="Resources\menu\menu_barcode_viewer.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+		Other similar extension points exist, see Microsoft.Common.targets.
+		<Target Name="BeforeBuild">
+		</Target>
+		<Target Name="AfterBuild">
+		</Target>
+	-->
+</Project>

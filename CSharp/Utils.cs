@@ -687,7 +687,6 @@ namespace BarcodeGeneratorDemo
 
         /// <summary>
         /// Determines whether barcode type is EAN or UPCA or UPCE type.
-        /// Определяет является тип штрих-кода EAN или UPCA или UPCE.
         /// </summary>
         /// <param name="barcodeType">A barcode type.</param>
         /// <returns>
