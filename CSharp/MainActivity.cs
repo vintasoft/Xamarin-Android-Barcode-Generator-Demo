@@ -85,6 +85,15 @@ namespace BarcodeGeneratorDemo
             : base()
         {
             VintasoftBarcode.VintasoftXamarinBarcodeLicense.Register();
+
+            try
+            {
+                // set UTF8 (65001) as default encoding
+                Vintasoft.XamarinBarcode.BarcodeInfo.BinaryValueItem.TextEncoding = System.Text.Encoding.UTF8;
+            }
+            catch
+            {
+            }
         }
 
         #endregion
