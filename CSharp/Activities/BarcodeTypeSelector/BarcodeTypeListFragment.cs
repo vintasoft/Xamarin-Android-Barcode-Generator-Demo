@@ -1,5 +1,4 @@
-﻿using Android.App;
-using Android.OS;
+﻿using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
@@ -12,7 +11,7 @@ namespace BarcodeGeneratorDemo
     /// <summary>
     /// A list fragment that allows to choose barcode type.
     /// </summary>
-    public class BarcodeTypeListFragment : ListFragment
+    public class BarcodeTypeListFragment : Android.Support.V4.App.ListFragment
     {
 
         #region Enum
@@ -35,13 +34,15 @@ namespace BarcodeGeneratorDemo
 
         #region Fields
 
+        BarcodeTypeSelectorActivity _barcodeTypeSelectorActivity;
+
         /// <summary>
         /// A list values.
         /// </summary>
         IList<string> _values;
 
         /// <summary>
-        /// Determines whether parent is fragment.
+        /// A value indicating whether parent is fragment.
         /// </summary>
         bool _isParentFragment = false;
 
@@ -59,6 +60,7 @@ namespace BarcodeGeneratorDemo
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeTypeListFragment"/> class.
         /// </summary>
@@ -67,14 +69,16 @@ namespace BarcodeGeneratorDemo
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeTypeListFragment"/> class.
         /// </summary>
         /// <param name="values">A values list.</param>
-        /// <param name="isParentFragment">A value that determines whether parent is fragment.</param>
-        internal BarcodeTypeListFragment(IList<string> values, bool isParentFragment)
+        /// <param name="isParentFragment">A value indicating whether parent is fragment.</param>
+        internal BarcodeTypeListFragment(BarcodeTypeSelectorActivity barcodeTypeSelectorActivity, IList<string> values, bool isParentFragment)
             : base()
         {
+            _barcodeTypeSelectorActivity = barcodeTypeSelectorActivity;
             _values = values;
             _isParentFragment = isParentFragment;
         }
@@ -126,7 +130,7 @@ namespace BarcodeGeneratorDemo
             base.OnActivityCreated(savedInstanceState);
 
             // create adapter
-            ListAdapter = new ArrayAdapter<string>(Activity, Android.Resource.Layout.SimpleListItem1, _values);
+            ListAdapter = new ArrayAdapter<string>(_barcodeTypeSelectorActivity, Android.Resource.Layout.SimpleListItem1, _values);
         }
 
         /// <summary>
@@ -163,13 +167,7 @@ namespace BarcodeGeneratorDemo
         /// <param name="barcodeTypeString">A string representation of barcode type.</param>
         private void SwitchToBarcodeEditorFragment(string barcodeTypeString)
         {
-            // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
-            // add fragment to the container
-            transaction.Replace(Resource.Id.mainContentFrame, new BarcodeEditorFragment(barcodeTypeString));
-            transaction.AddToBackStack(null);
-            // commit the transaction
-            transaction.Commit();
+            _barcodeTypeSelectorActivity.CreateBarcodeEditorFragment(barcodeTypeString);
         }
 
         /// <summary>
@@ -198,13 +196,7 @@ namespace BarcodeGeneratorDemo
                     break;
             }
 
-            // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
-            // add fragment to the container
-            transaction.Replace(Resource.Id.mainContentFrame, new BarcodeTypeListFragment(barcodeTypeList, true));
-            transaction.AddToBackStack(null);
-            // commit the transaction
-            transaction.Commit();
+            _barcodeTypeSelectorActivity.CreateBarcodeTypeListFragment(barcodeTypeList, true, true);
         }
 
         #endregion

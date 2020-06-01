@@ -87,7 +87,7 @@ namespace BarcodeGeneratorDemo
             SupportActionBar.SetTitle(Resource.String.settings_barcode_button);
 
             // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             // add fragment to the container
             transaction.Replace(Resource.Id.mainContentFrame, new SettingsFragment());
             // commit the transaction

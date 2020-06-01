@@ -21,10 +21,15 @@ namespace BarcodeGeneratorDemo
     /// <summary>
     /// The barcode viewer fragment.
     /// </summary>
-    public class BarcodeViewerFragment : Fragment
+    public class BarcodeViewerFragment : Android.Support.V4.App.Fragment
     {
 
         #region Fields
+
+        /// <summary>
+        /// Barcode viewer activity.
+        /// </summary>
+        BarcodeViewerActivity _barcodeViewerActivity;
 
         /// <summary>
         /// The text view with barcode value.
@@ -65,22 +70,26 @@ namespace BarcodeGeneratorDemo
 
 
 
-        #region Constructor
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeViewerFragment"/> class.
         /// </summary>
-        public BarcodeViewerFragment()
+        public BarcodeViewerFragment(BarcodeViewerActivity barcodeViewerActivity)
             : base()
-        { }
+        {
+            _barcodeViewerActivity = barcodeViewerActivity;
+        }
+
 
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeViewerFragment"/> class.
         /// </summary>
         protected BarcodeViewerFragment(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer)
             : base(javaReference, transfer)
-        { }
-        
+        {
+        }
+
         #endregion
 
 
@@ -94,7 +103,7 @@ namespace BarcodeGeneratorDemo
         {
             get
             {
-                return ((BarcodeViewerActivity)Activity).BarcodeInformation;
+                return _barcodeViewerActivity.BarcodeInformation;
             }
         }
 
@@ -105,7 +114,7 @@ namespace BarcodeGeneratorDemo
         {
             get
             {
-                return ((BarcodeViewerActivity)Activity).BarcodeInformation.BarcodeDescription;
+                return _barcodeViewerActivity.BarcodeInformation.BarcodeDescription;
             }
         }
 
@@ -124,7 +133,8 @@ namespace BarcodeGeneratorDemo
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            SetHasOptionsMenu(true);
+
+            this.HasOptionsMenu = true;
         }
 
         /// <summary>
@@ -149,7 +159,7 @@ namespace BarcodeGeneratorDemo
             _barcodeValueTextView.MovementMethod = LinkMovementMethod.Instance;
             _barcodeDescriptionTextView = view.FindViewById<TextView>(Resource.Id.barcode_description_text_view);
             _barcodeValueImageView = view.FindViewById<ImageView>(Resource.Id.barcode_value_image_view);
-            
+
             return view;
         }
 
@@ -182,11 +192,11 @@ namespace BarcodeGeneratorDemo
         /// </returns>
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch(item.ItemId)
+            switch (item.ItemId)
             {
                 // if edit button is pressed
                 case Resource.Id.action_edit:
-                    ((BarcodeViewerActivity)Activity).SwitchToBarcodeEditorFragment();
+                    _barcodeViewerActivity.SwitchToBarcodeEditorFragment();
                     return true;
 
                 // if save button is pressed
@@ -196,12 +206,12 @@ namespace BarcodeGeneratorDemo
 
                 // if delete button is pressed
                 case Resource.Id.action_delete:
-                    DeleteIsPressed();
+                    DeleteBarcode();
                     return true;
             }
             return base.OnOptionsItemSelected(item);
         }
-        
+
         #endregion
 
 
@@ -240,7 +250,7 @@ namespace BarcodeGeneratorDemo
             {
                 // get display size
                 DisplayMetrics displayMetrics = new DisplayMetrics();
-                Activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
+                _barcodeViewerActivity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
                 // get parameters for postal barcodes
                 float maxPostalBarcodeHeight = Resources.GetDimensionPixelSize(Resource.Dimension.max_postal_barcode_height);
                 float maxOneSymbolPostalBarcodeWidth = Resources.GetDimensionPixelSize(Resource.Dimension.max_one_symbol_postal_barcode_width);
@@ -273,7 +283,7 @@ namespace BarcodeGeneratorDemo
             catch (WriterSettingsException ex)
             {
                 // dialog creater
-                using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Activity))
+                using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_barcodeViewerActivity))
                 {
                     string message = ex.Message;
 
@@ -307,16 +317,16 @@ namespace BarcodeGeneratorDemo
             if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 // check WriteExternalStorage permission
-                if (Activity.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != Permission.Granted)
+                if (_barcodeViewerActivity.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != Permission.Granted)
                 {
                     RequestPermissions(new string[] { Manifest.Permission.WriteExternalStorage }, 0);
                 }
             }
 
             // dialog creater
-            using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Activity))
+            using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_barcodeViewerActivity))
             {
-                dialogBuilder.SetView(LayoutInflater.From(Activity).Inflate(Resource.Layout.save_dialog_layout, null));
+                dialogBuilder.SetView(LayoutInflater.From(_barcodeViewerActivity).Inflate(Resource.Layout.save_dialog_layout, null));
                 // create buttons
                 dialogBuilder.SetPositiveButton(Resource.String.save_button, SaveDialogButtonClicked);
                 dialogBuilder.SetNegativeButton(Resource.String.cancel_button, SaveDialogButtonClicked);
@@ -434,12 +444,12 @@ namespace BarcodeGeneratorDemo
 
                 if (string.IsNullOrWhiteSpace(fileNameEditText.Text))
                 {
-                    Toast.MakeText(Activity, Resource.String.filename_empty_message, ToastLength.Long).Show();
+                    Toast.MakeText(_barcodeViewerActivity, Resource.String.filename_empty_message, ToastLength.Long).Show();
                     return;
                 }
                 if (string.IsNullOrWhiteSpace(filePathEditText.Text))
                 {
-                    Toast.MakeText(Activity, Resource.String.filepath_empty_message, ToastLength.Long).Show();
+                    Toast.MakeText(_barcodeViewerActivity, Resource.String.filepath_empty_message, ToastLength.Long).Show();
                     return;
                 }
 
@@ -490,11 +500,11 @@ namespace BarcodeGeneratorDemo
 
                     // notify user that the barcode image is successfully saved to the file
                     string message = string.Format(Resources.GetString(Resource.String.barcode_saved_message), fullPathWithExtention);
-                    Toast.MakeText(Activity, message, ToastLength.Long).Show();
+                    Toast.MakeText(_barcodeViewerActivity, message, ToastLength.Long).Show();
                 }
                 catch (Exception e)
                 {
-                    Toast.MakeText(Activity, e.Message, ToastLength.Long).Show();
+                    Toast.MakeText(_barcodeViewerActivity, e.Message, ToastLength.Long).Show();
                     if (File.Exists(fullPathWithExtention))
                         File.Delete(fullPathWithExtention);
                 }
@@ -505,16 +515,16 @@ namespace BarcodeGeneratorDemo
         }
 
         /// <summary>
-        /// Delete is pressed.
+        /// Deletes barcode.
         /// </summary>
-        private void DeleteIsPressed()
+        private void DeleteBarcode()
         {
             // dialog creater
-            using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Activity))
+            using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_barcodeViewerActivity))
             {
                 // create buttons
                 dialogBuilder.SetPositiveButton(Resources.GetString(Resource.String.delete_button), DeleteDialogButtonClicked);
-                dialogBuilder.SetNegativeButton(Resources.GetString(Resource.String.cancel_button), (EventHandler<DialogClickEventArgs>) null);
+                dialogBuilder.SetNegativeButton(Resources.GetString(Resource.String.cancel_button), (EventHandler<DialogClickEventArgs>)null);
 
                 // create dialog
                 _saveBarcodeImageDialog = dialogBuilder.Create();
@@ -535,8 +545,8 @@ namespace BarcodeGeneratorDemo
         /// </summary>
         private void DeleteDialogButtonClicked(object sender, DialogClickEventArgs args)
         {
-            ((BarcodeViewerActivity)Activity).SetDeleteBarcodeFlag(true);
-            Activity.OnBackPressed();
+            _barcodeViewerActivity.SetDeleteBarcodeFlag(true);
+            _barcodeViewerActivity.OnBackPressed();
         }
 
         #endregion

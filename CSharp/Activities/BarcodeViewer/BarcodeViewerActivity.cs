@@ -25,7 +25,7 @@ namespace BarcodeGeneratorDemo
         /// The barcode editor fragment.
         /// </summary>
         BarcodeEditorFragment _barcodeEditorFragment;
-        
+
         /// <summary>
         /// The barcode viewer fragment.
         /// </summary>
@@ -53,7 +53,7 @@ namespace BarcodeGeneratorDemo
                 return _barcode;
             }
         }
-        
+
         #endregion
 
 
@@ -85,7 +85,7 @@ namespace BarcodeGeneratorDemo
         /// </returns>
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch(item.ItemId)
+            switch (item.ItemId)
             {
                 // if home button is pressed
                 case Android.Resource.Id.Home:
@@ -102,6 +102,7 @@ namespace BarcodeGeneratorDemo
         public override void OnConfigurationChanged(Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
+
             _barcodeViewerFragment.UpdateUI();
         }
 
@@ -131,11 +132,11 @@ namespace BarcodeGeneratorDemo
             string barcodeSubset = Intent.GetStringExtra("barcodeSubset");
             string barcodeValue = Intent.GetStringExtra("barcodeValue");
             _barcode = new Utils.BarcodeInformation(barcodeWriterSettings, barcodeValue, barcodeDescription, barcodeSubset);
-                        
-            _barcodeViewerFragment = new BarcodeViewerFragment();
+
+            _barcodeViewerFragment = new BarcodeViewerFragment(this);
 
             // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             // add fragment to the container
             transaction.Replace(Resource.Id.mainContentFrame, _barcodeViewerFragment);
             // commit the transaction
@@ -155,13 +156,13 @@ namespace BarcodeGeneratorDemo
             if (_barcodeEditorFragment == null)
             {
                 if (_barcode.BarcodeSubsetName != null && _barcode.BarcodeSubsetName != "")
-                    _barcodeEditorFragment = new BarcodeEditorFragment(_barcode.BarcodeSubsetName);
+                    _barcodeEditorFragment = new BarcodeEditorFragment(this, _barcode.BarcodeSubsetName);
                 else
-                    _barcodeEditorFragment = new BarcodeEditorFragment(Utils.BarcodeTypeToString(_barcode.BarcodeWriterSetting.Barcode));
+                    _barcodeEditorFragment = new BarcodeEditorFragment(this, Utils.BarcodeTypeToString(_barcode.BarcodeWriterSetting.Barcode));
             }
 
             // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             // add fragment to the container
             transaction.Replace(Resource.Id.mainContentFrame, _barcodeEditorFragment);
             // add transaction to back stack

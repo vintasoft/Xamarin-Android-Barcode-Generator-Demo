@@ -55,10 +55,39 @@ namespace BarcodeGeneratorDemo
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetTitle(Resource.String.title_barcode_type_selector);
 
+            string[] barcodeTypeList = Resources.GetStringArray(Resource.Array.barcode_list);
+            CreateBarcodeTypeListFragment(barcodeTypeList, false, false);
+        }
+
+        /// <summary>
+        /// Creates BarcodeTypeListFragment and adds fragment to the container of this activity.
+        /// </summary>
+        /// <param name="barcodeTypeList">An array with barcode type strings.</param>
+        /// <param name="isParentFragment">A value indicating whether parent is fragment.</param>
+        /// <param name="addToBackStack">A value indicating whether created fragment must be added to the back stack.</param>
+        internal void CreateBarcodeTypeListFragment(string[] barcodeTypeList, bool isParentFragment, bool addToBackStack)
+        {
             // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             // add fragment to the container
-            transaction.Replace(Resource.Id.mainContentFrame, new BarcodeTypeListFragment(Resources.GetStringArray(Resource.Array.barcode_list), false));
+            transaction.Replace(Resource.Id.mainContentFrame, new BarcodeTypeListFragment(this, barcodeTypeList, isParentFragment));
+            if (addToBackStack)
+                transaction.AddToBackStack(null);
+            // commit the transaction
+            transaction.Commit();
+        }
+
+        /// <summary>
+        /// Creates BarcodeEditorFragment and adds fragment to the container of this activity.
+        /// </summary>
+        /// <param name="barcodeTypeString">A barcode type string.</param>
+        internal void CreateBarcodeEditorFragment(string barcodeTypeString)
+        {
+            // create a new transaction
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+            // add fragment to the container
+            transaction.Replace(Resource.Id.mainContentFrame, new BarcodeEditorFragment(this, barcodeTypeString));
+            transaction.AddToBackStack(null);
             // commit the transaction
             transaction.Commit();
         }

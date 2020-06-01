@@ -1,8 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.Database;
 using Android.OS;
-using Android.Text;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -15,10 +13,12 @@ namespace BarcodeGeneratorDemo
     /// <summary>
     /// The barcode generator fragment.
     /// </summary>
-    public class BarcodeGeneratorFragment : ListFragment
+    public class BarcodeGeneratorFragment : Android.Support.V4.App.ListFragment
     {
 
         #region Fields
+
+        MainActivity _mainActivity;
 
         /// <summary>
         /// The list of initial values.
@@ -29,6 +29,41 @@ namespace BarcodeGeneratorDemo
         /// The empty list message text view.
         /// </summary>
         TextView _emptyMessageTextView;
+
+        #endregion
+
+
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
+        /// </summary>
+        public BarcodeGeneratorFragment()
+            : base()
+        {
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
+        /// </summary>
+        protected BarcodeGeneratorFragment(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
+        /// </summary>
+        /// <param name="values">A list of initial values.</param>
+        internal BarcodeGeneratorFragment(MainActivity mainActivity, List<Utils.BarcodeInformation> values)
+            : base()
+        {
+            _mainActivity = mainActivity;
+            _initialValues = values;
+        }
 
         #endregion
 
@@ -52,36 +87,6 @@ namespace BarcodeGeneratorDemo
 
 
 
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
-        /// </summary>
-        public BarcodeGeneratorFragment()
-            : base()
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
-        /// </summary>
-        protected BarcodeGeneratorFragment(IntPtr javaReference, Android.Runtime.JniHandleOwnership transfer)
-            : base(javaReference, transfer)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="BarcodeGeneratorFragment"/> class.
-        /// </summary>
-        /// <param name="values">A list of initial values.</param>
-        internal BarcodeGeneratorFragment(List<Utils.BarcodeInformation> values)
-            : base()
-        {
-            _initialValues = values;
-        }
-
-        #endregion
-
-
-
         #region Methods
 
         #region PUBLIC
@@ -94,7 +99,7 @@ namespace BarcodeGeneratorDemo
         {
             base.OnCreate(savedInstanceState);
 
-            SetHasOptionsMenu(true);
+            this.HasOptionsMenu = true;
         }
 
         /// <summary>
@@ -115,7 +120,7 @@ namespace BarcodeGeneratorDemo
         {
             View view = base.OnCreateView(inflater, container, savedInstanceState);
 
-            _emptyMessageTextView = new TextView(Activity);
+            _emptyMessageTextView = new TextView(_mainActivity);
             _emptyMessageTextView.Text = Resources.GetString(Resource.String.empty_list_message);
             _emptyMessageTextView.SetTextSize(ComplexUnitType.Sp, 20);
             _emptyMessageTextView.Gravity = GravityFlags.Center;
@@ -146,7 +151,7 @@ namespace BarcodeGeneratorDemo
             // create adapter
             if (_initialValues == null)
                 _initialValues = new List<Utils.BarcodeInformation>();
-            ListAdapter = new BarcodeArrayAdapter(Activity, _initialValues);
+            ListAdapter = new BarcodeArrayAdapter(_mainActivity, _initialValues);
         }
 
         /// <summary>
@@ -178,7 +183,7 @@ namespace BarcodeGeneratorDemo
             {
                 // if "About" button is pressed
                 case Resource.Id.action_about:
-                    ((MainActivity)Activity).ShowInfoDialog(
+                    _mainActivity.ShowInfoDialog(
                         Resources.GetString(Resource.String.app_name),
                         string.Format(Resources.GetString(Resource.String.about_message), System.Reflection.Assembly.GetExecutingAssembly().GetName().Version));
                     return true;
@@ -186,19 +191,19 @@ namespace BarcodeGeneratorDemo
                 // if "Add" button is pressed
                 case Resource.Id.action_add:
                     _clickedItemIndex = -1;
-                    Intent addIntent = new Intent(Activity, typeof(BarcodeTypeSelectorActivity));
+                    Intent addIntent = new Intent(_mainActivity, typeof(BarcodeTypeSelectorActivity));
                     StartActivity(addIntent);
                     return true;
 
                 // if "Scan" button is pressed
                 case Resource.Id.action_scan:
                     _clickedItemIndex = -1;
-                    ((MainActivity)Activity).ScanBarcode();
+                    _mainActivity.ScanBarcode();
                     return true;
 
                 // if "Delete all" button is pressed
                 case Resource.Id.action_delete_all:
-                    using (AlertDialog.Builder builder = new AlertDialog.Builder(Activity))
+                    using (AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity))
                     {
                         // if barcode list is empty
                         if (ListAdapter.Count == 0)
@@ -225,7 +230,7 @@ namespace BarcodeGeneratorDemo
 
                 // if "Settings" button is pressed
                 case Resource.Id.action_settings:
-                    Intent settingsIntent = new Intent(Activity, typeof(SettingsActivity));
+                    Intent settingsIntent = new Intent(_mainActivity, typeof(SettingsActivity));
                     StartActivity(settingsIntent);
                     return true;
             }
@@ -248,7 +253,7 @@ namespace BarcodeGeneratorDemo
             // get clicked item
             Utils.BarcodeInformation item = ((BarcodeArrayAdapter)ListAdapter).GetItem(position);
 
-            ((MainActivity)Activity).SwitchToBarcodeViewer(Activity, item);
+            _mainActivity.SwitchToBarcodeViewer(_mainActivity, item);
         }
 
         #endregion
@@ -280,7 +285,7 @@ namespace BarcodeGeneratorDemo
             adapter.Clear();
             adapter.NotifyDataSetChanged();
             // delete saved history
-            ((MainActivity)Activity).DeleteSavedHistory();
+            _mainActivity.DeleteSavedHistory();
 
             _emptyMessageTextView.Visibility = ViewStates.Visible;
         }

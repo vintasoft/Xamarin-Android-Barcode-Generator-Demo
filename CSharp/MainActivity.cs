@@ -67,11 +67,6 @@ namespace BarcodeGeneratorDemo
         /// </summary>
         string _historyFilePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "history.data");
 
-        /// <summary>
-        /// Determines that the WriteExternalStorage permission is granted.
-        /// </summary>
-        bool _isWriteExternalStorageGranted = false;
-
         #endregion
 
 
@@ -151,16 +146,16 @@ namespace BarcodeGeneratorDemo
             Utils.SetLocaleFromPrefereces(this);
             SetContentView(Resource.Layout.main);
 
-            _barcodeGeneratorFragment = (BarcodeGeneratorFragment)FragmentManager.FindFragmentByTag(BARCODE_GENERATOR_FRAGMENT_TAG);
+            _barcodeGeneratorFragment = (BarcodeGeneratorFragment)SupportFragmentManager.FindFragmentByTag(BARCODE_GENERATOR_FRAGMENT_TAG);
             if (_barcodeGeneratorFragment == null)
-                _barcodeGeneratorFragment = new BarcodeGeneratorFragment(values);
+                _barcodeGeneratorFragment = new BarcodeGeneratorFragment(this, values);
 
             SupportActionBar.SetHomeButtonEnabled(true);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.Show();
 
             // create a new transaction
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
             // add fragment to the container
             transaction.Replace(Resource.Id.mainContentFrame, _barcodeGeneratorFragment, BARCODE_GENERATOR_FRAGMENT_TAG);
             // commit the transaction
@@ -175,13 +170,11 @@ namespace BarcodeGeneratorDemo
                 }
                 else
                 {
-                    _isWriteExternalStorageGranted = true;
                 }
             }
             // if Android version is less than 6.0 (API 23)
             else
             {
-                _isWriteExternalStorageGranted = true;
             }
         }
 
@@ -199,7 +192,6 @@ namespace BarcodeGeneratorDemo
             {
                 if (grantResults[0] == Permission.Granted)
                 {
-                    _isWriteExternalStorageGranted = true;
                 }
                 else
                 {
@@ -371,7 +363,7 @@ namespace BarcodeGeneratorDemo
                 StartActivityForResult(scanIntent, 0);
             }
             // if Vintasoft Barcode Scanner application is not found
-            catch (ActivityNotFoundException ex)
+            catch (ActivityNotFoundException)
             {
                 using (Android.Support.V7.App.AlertDialog.Builder builder = new Android.Support.V7.App.AlertDialog.Builder(this))
                 {

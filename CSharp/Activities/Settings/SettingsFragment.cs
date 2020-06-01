@@ -1,30 +1,19 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Preferences;
-using Android.Views;
-using System;
+﻿using Android.OS;
 
 namespace BarcodeGeneratorDemo
 {
     /// <summary>
     /// The fragment that contains user interface for application settings.
     /// </summary>
-    public class SettingsFragment : PreferenceFragment
+    public class SettingsFragment : Android.Support.V7.Preferences.PreferenceFragmentCompat
     {
 
         #region Methods
 
-        /// <summary>
-        /// Called to do initial creation of a fragment.
-        /// </summary>
-        /// <param name="savedInstanceState">The saved instance state if the fragment is being re-created from a previous saved state.</param>
-        public override void OnCreate(Bundle savedInstanceState)
+        public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
         {
-            base.OnCreate(savedInstanceState);            
-
             AddPreferencesFromResource(Resource.Xml.settings_page);
-        }      
+        }
 
         #endregion
 

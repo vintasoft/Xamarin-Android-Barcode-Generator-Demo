@@ -19,7 +19,7 @@ namespace BarcodeGeneratorDemo
     /// <summary>
     /// A fragment, which allows to edit a barcode value.
     /// </summary>
-    public class BarcodeEditorFragment : Fragment
+    public class BarcodeEditorFragment : Android.Support.V4.App.Fragment
     {
 
         #region Nested classes
@@ -171,7 +171,7 @@ namespace BarcodeGeneratorDemo
                 if (item is PDF417ErrorCorrectionLevel)
                     value = Utils.PDF417ErrorCorrectionLevelToString((PDF417ErrorCorrectionLevel)item);
 
-                
+
                 if (item is int)
                 {
                     if ((int)item == -1)
@@ -220,6 +220,8 @@ namespace BarcodeGeneratorDemo
 
 
         #region Fields
+
+        Activity _activity;
 
         /// <summary>
         /// Determines whether <see cref="_barcodeTypeName"/> is subset name.
@@ -303,6 +305,7 @@ namespace BarcodeGeneratorDemo
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeEditorFragment"/> class.
         /// </summary>
@@ -311,13 +314,15 @@ namespace BarcodeGeneratorDemo
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of <see cref="BarcodeEditorFragment"/> class.
         /// </summary>
         /// <param name="barcodeTypeName">A string representation of barcode type.</param>
-        internal BarcodeEditorFragment(string barcodeTypeName)
+        internal BarcodeEditorFragment(Activity activity, string barcodeTypeName)
             : base()
         {
+            _activity = activity;
             _barcodeTypeName = barcodeTypeName;
         }
 
@@ -337,8 +342,7 @@ namespace BarcodeGeneratorDemo
         {
             base.OnCreate(savedInstanceState);
 
-            // Create your fragment here
-            SetHasOptionsMenu(true);
+            this.HasOptionsMenu = true;
         }
 
         /// <summary>
@@ -462,9 +466,9 @@ namespace BarcodeGeneratorDemo
                     if (CheckValue(true))
                     {
                         // if parent activity is BarcodeTypeSelectorActivity
-                        if (Activity is BarcodeTypeSelectorActivity)
+                        if (_activity is BarcodeTypeSelectorActivity)
                         {
-                            Intent intent = new Intent(Activity, typeof(BarcodeViewerActivity));
+                            Intent intent = new Intent(_activity, typeof(BarcodeViewerActivity));
                             // serialize data
                             string xmlSerialization = Utils.SerializeBarcodeWriterSettings(_barcodeWriterSettings);
                             intent.PutExtra("barcode", xmlSerialization);
@@ -477,15 +481,15 @@ namespace BarcodeGeneratorDemo
                             StartActivity(intent);
                         }
                         // if parent activity is barcode viewer activity
-                        else if (Activity is BarcodeViewerActivity)
+                        else if (_activity is BarcodeViewerActivity)
                         {
                             // set changed values to the parent activity
-                            BarcodeViewerActivity barcodeViewerActivity = (BarcodeViewerActivity)Activity;
+                            BarcodeViewerActivity barcodeViewerActivity = (BarcodeViewerActivity)_activity;
                             barcodeViewerActivity.BarcodeInformation.BarcodeWriterSetting = _barcodeWriterSettings.Clone();
                             barcodeViewerActivity.BarcodeInformation.BarcodeDescription = _barcodeDescriptionEditText.Text;
                             barcodeViewerActivity.BarcodeInformation.BarcodeValue = _barcodeValue;
                             // return to the parent activity
-                            Activity.OnBackPressed();
+                            _activity.OnBackPressed();
                         }
                     }
                     return true;
@@ -681,7 +685,7 @@ namespace BarcodeGeneratorDemo
                 if (isDialogShouldBeUsed)
                 {
                     // dialog creater
-                    using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Activity))
+                    using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_activity))
                     {
                         string message = ex.Message;
 
@@ -785,12 +789,12 @@ namespace BarcodeGeneratorDemo
 
             // get display size
             DisplayMetrics displayMetrics = new DisplayMetrics();
-            Activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
+            _activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
             // get predefined max hieght of postal barcode
             float maxPostalBarcodeHeight = Resources.GetDimensionPixelSize(Resource.Dimension.max_postal_barcode_height);
             // get predefined max width of one encoded symbol of postal barcode
             float maxOneSymbolPostalBarcodeWidth = Resources.GetDimensionPixelSize(Resource.Dimension.max_one_symbol_postal_barcode_width);
-            
+
             // barcode size
             int barcodeWidth;
             int barcodeHeight;
@@ -837,9 +841,9 @@ namespace BarcodeGeneratorDemo
 
 
             // create adapters
-            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(Activity);
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
-            EnumSpinnerArrayAdapter symbolSizeAdapter2 = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(_activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter2 = new EnumSpinnerArrayAdapter(_activity);
             errorCorrectionLevelAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter2.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
@@ -877,7 +881,7 @@ namespace BarcodeGeneratorDemo
             symbolSizeLayout.Visibility = ViewStates.Visible;
 
             // create adapter
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             // set values
             symbolSizeAdapter.AddAll(Utils.MicroPDF417SimbolSizes);
@@ -905,8 +909,8 @@ namespace BarcodeGeneratorDemo
 
 
             // create adapters
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
-            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
+            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(_activity);
             errorCorrectionLevelAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             // set values
@@ -940,8 +944,8 @@ namespace BarcodeGeneratorDemo
 
 
             // create adapters
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
-            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
+            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(_activity);
             errorCorrectionLevelAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             // set values
@@ -977,8 +981,8 @@ namespace BarcodeGeneratorDemo
             symbolSizeLabel.Text = Resources.GetString(Resource.String.han_xin_symbol_version_label);
 
             // create adapters
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
-            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
+            EnumSpinnerArrayAdapter errorCorrectionLevelAdapter = new EnumSpinnerArrayAdapter(_activity);
             errorCorrectionLevelAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             // set values
@@ -988,7 +992,7 @@ namespace BarcodeGeneratorDemo
             // get picker views
             _barcodeErrorCorrectionLevelSpinner = view.FindViewById<Spinner>(Resource.Id.barcode_error_correction_level_spinner);
             _barcodeSymbolSizeSpinner = view.FindViewById<Spinner>(Resource.Id.barcode_symbol_size_spinner);
-            // set adapters            
+            // set adapters
             _barcodeErrorCorrectionLevelSpinner.Adapter = errorCorrectionLevelAdapter;
             _barcodeSymbolSizeSpinner.Adapter = symbolSizeAdapter;
 
@@ -1009,7 +1013,7 @@ namespace BarcodeGeneratorDemo
             symbolSizeLayout.Visibility = ViewStates.Visible;
 
             // create adapter
-            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(Activity);
+            EnumSpinnerArrayAdapter symbolSizeAdapter = new EnumSpinnerArrayAdapter(_activity);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             // set values
             symbolSizeAdapter.AddAll(Utils.DataMatrixSymbolSizes);
@@ -1042,8 +1046,8 @@ namespace BarcodeGeneratorDemo
             errorCorrectionLevelLabel.Text = Resources.GetString(Resource.String.aztec_error_correction_level_label);
 
             // create adapters
-            ArrayAdapter<int> errorCorrectionLevelAdapter = new ArrayAdapter<int>(Activity, Android.Resource.Layout.SimpleSpinnerItem);
-            ArrayAdapter<int> symbolSizeAdapter = new ArrayAdapter<int>(Activity, Android.Resource.Layout.SimpleSpinnerItem);
+            ArrayAdapter<int> errorCorrectionLevelAdapter = new ArrayAdapter<int>(_activity, Android.Resource.Layout.SimpleSpinnerItem);
+            ArrayAdapter<int> symbolSizeAdapter = new ArrayAdapter<int>(_activity, Android.Resource.Layout.SimpleSpinnerItem);
             errorCorrectionLevelAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             symbolSizeAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
 
