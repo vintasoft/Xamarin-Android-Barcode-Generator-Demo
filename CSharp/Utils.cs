@@ -530,6 +530,7 @@ namespace BarcodeGeneratorDemo
             return
                 barcodeType == BarcodeType.Aztec ||
                 barcodeType == BarcodeType.DataMatrix ||
+                barcodeType == BarcodeType.DotCode ||
                 barcodeType == BarcodeType.QR ||
                 barcodeType == BarcodeType.MicroQR ||
                 barcodeType == BarcodeType.MaxiCode ||
@@ -827,6 +828,9 @@ namespace BarcodeGeneratorDemo
                 case BarcodeType.DataMatrix:
                     return "DataMatrix";
 
+                case BarcodeType.DotCode:
+                    return "DotCode";
+
                 case BarcodeType.QR:
                     return "QR";
 
@@ -883,10 +887,6 @@ namespace BarcodeGeneratorDemo
 
                 case BarcodeType.HanXinCode:
                     return "HanXinCode";
-
-                case BarcodeType.DotCode:
-                    return "DotCode";
-
             }
             return null;
         }
