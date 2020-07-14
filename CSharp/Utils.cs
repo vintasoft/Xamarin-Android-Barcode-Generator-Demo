@@ -884,6 +884,9 @@ namespace BarcodeGeneratorDemo
                 case BarcodeType.HanXinCode:
                     return "HanXinCode";
 
+                case BarcodeType.DotCode:
+                    return "DotCode";
+
             }
             return null;
         }
@@ -1798,6 +1801,7 @@ namespace BarcodeGeneratorDemo
             // 2D barcodes
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.Aztec), BarcodeType.Aztec);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.DataMatrix), BarcodeType.DataMatrix);
+            BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.DotCode), BarcodeType.DotCode);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.PDF417), BarcodeType.PDF417);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.MicroPDF417), BarcodeType.MicroPDF417);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeTypeToString(BarcodeType.HanXinCode), BarcodeType.HanXinCode);
@@ -1813,6 +1817,7 @@ namespace BarcodeGeneratorDemo
             {
                 BarcodeTypeToString(BarcodeType.Aztec),
                 BarcodeTypeToString(BarcodeType.DataMatrix),
+                BarcodeTypeToString(BarcodeType.DotCode),
                 BarcodeTypeToString(BarcodeType.PDF417),
                 BarcodeTypeToString(BarcodeType.MicroPDF417),
                 BarcodeTypeToString(BarcodeType.HanXinCode),
@@ -1836,6 +1841,7 @@ namespace BarcodeGeneratorDemo
             // GS1 barcodes
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1Aztec.Name.ToString(), BarcodeSymbologySubsets.GS1Aztec);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1DataMatrix.Name.ToString(), BarcodeSymbologySubsets.GS1DataMatrix);
+            BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1DotCode.Name.ToString(), BarcodeSymbologySubsets.GS1DotCode);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1QR.Name.ToString(), BarcodeSymbologySubsets.GS1QR);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1DataBar.Name.ToString(), BarcodeSymbologySubsets.GS1DataBar);
             BarcodeTypeNameToBarcodeTypes.Add(BarcodeSymbologySubsets.GS1_128.Name.ToString(), BarcodeSymbologySubsets.GS1_128);
@@ -1849,6 +1855,7 @@ namespace BarcodeGeneratorDemo
             {
                 BarcodeSymbologySubsets.GS1Aztec.Name.ToString(),
                 BarcodeSymbologySubsets.GS1DataMatrix.Name.ToString(),
+                BarcodeSymbologySubsets.GS1DotCode.Name.ToString(),
                 BarcodeSymbologySubsets.GS1QR.Name.ToString(),
                 BarcodeSymbologySubsets.GS1DataBar.Name.ToString(),
                 BarcodeSymbologySubsets.GS1_128.Name.ToString(),
