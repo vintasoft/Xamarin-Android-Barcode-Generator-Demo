@@ -379,7 +379,7 @@ namespace BarcodeGeneratorDemo
             if (barcodeTypeObject is BarcodeSymbologySubset)
             {
                 _isSubset = true;
-                barcodeType = ((BarcodeSymbologySubset)barcodeTypeObject).BaseType;
+                barcodeType = ((BarcodeSymbologySubset)barcodeTypeObject).BarcodeType;
                 isDigitsOnlyBarcode = Utils.IsDigitsOnlyBarcode((BarcodeSymbologySubset)barcodeTypeObject);
             }
             else
@@ -702,6 +702,38 @@ namespace BarcodeGeneratorDemo
                         // show on screen
                         dialog.Show();
                     }
+                }
+                _barcodeImagePreview.Visibility = ViewStates.Invisible;
+                _barcodeGeneratorErrorTextView.Visibility = ViewStates.Visible;
+                _barcodeGeneratorErrorTextView.Text = ex.Message;
+                return false;
+            }
+            catch (System.ComponentModel.LicenseException ex)
+            {
+                using (AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_activity))
+                {
+                    // create button
+                    dialogBuilder.SetPositiveButton(Resources.GetString(Resource.String.ok_button), (EventHandler<DialogClickEventArgs>)null);
+
+                    // create dialog
+                    AlertDialog dialog = dialogBuilder.Create();
+
+                    // set dialog title
+                    dialog.SetTitle("License exception");
+                    
+                    // set dialog message
+                    dialog.SetMessage(ex.Message);
+                    // show on screen
+                    dialog.Show();
+
+                    TextView dialogTextView = dialog.FindViewById<TextView>(Android.Resource.Id.Message);
+                    // allow to select dialog text
+                    dialogTextView.SetTextIsSelectable(true);
+                    // allow to click links
+                    dialogTextView.MovementMethod = LinkMovementMethod.Instance;
+                    dialogTextView.LinksClickable = true;
+                    // add links
+                    Utils.MyLinkify.AddLinks(dialogTextView, Patterns.WebUrl, null, new Utils.MyLinkify(), null);
                 }
                 _barcodeImagePreview.Visibility = ViewStates.Invisible;
                 _barcodeGeneratorErrorTextView.Visibility = ViewStates.Visible;
